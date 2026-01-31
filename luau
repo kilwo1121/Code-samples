@@ -54,7 +54,9 @@ local lastIntercept = {}
 
 
 
-
+-----------------------------
+REPLICATION HANDLER 
+-----------------------------
 game.ReplicatedStorage.TankSystem.Events.Replicate.OnClientEvent:Connect(function(Player, Event, Var1, Var2, Var3, Var4, Var5)
 	if Player.Name ~= game.Players.LocalPlayer.Name then
 		if Event == "TankReplicate" then
@@ -83,7 +85,7 @@ game.ReplicatedStorage.TankSystem.Events.Replicate.OnClientEvent:Connect(functio
 		local TracksFolder = Event
 		local HitTrack = Var1
 
-		if HitTrack then
+		if HitTrack then --------------- Track disable on the tank, handles everything to be replicated
 			local hitNumber = tonumber(HitTrack:match("%d+"))
 			if hitNumber then
 				-- find current destroyed min/max
@@ -100,12 +102,10 @@ game.ReplicatedStorage.TankSystem.Events.Replicate.OnClientEvent:Connect(functio
 					end
 				end
 
-				-- also include the current hit in the range
 				if hitNumber < minDestroyed then minDestroyed = hitNumber end
 				if hitNumber > maxDestroyed then maxDestroyed = hitNumber end
 
-				-- cap max gap size
-				local MAX_GAP = 20
+				local MAX_GAP = 20 
 				local gap = maxDestroyed - minDestroyed
 				if gap > MAX_GAP then
 					-- shrink range so it's not absurdly big
@@ -133,6 +133,9 @@ game.ReplicatedStorage.TankSystem.Events.Replicate.OnClientEvent:Connect(functio
 	end
 
 end)
+-----------------------------
+TANK SETUP WHEN SEATED
+-----------------------------
 
 Humanoid:GetPropertyChangedSignal("SeatPart"):Connect(function()
 	local SeatPart = Humanoid.SeatPart
